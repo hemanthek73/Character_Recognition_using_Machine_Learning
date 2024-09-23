@@ -145,3 +145,72 @@ plt.show()<br>
 <li>history.history['accuracy']: Contains the accuracy metrics for each epoch.</li>
 <li>history.history['loss']: Contains the loss values for each epoch.</li>
 
+---------------------------------------------------------------------------------------------
+#app.py
+<h1> Importing Libraries</h1>
+from flask import Flask, render_template, request, redirect, url_for<br>
+import os<br>
+import cv2<br>
+import numpy as np<br>
+from tensorflow.keras.models import load_model<br>
+<li>Flask: A lightweight Python web framework used to create the web application.</li>
+<li>render_template: Renders HTML files for displaying web pages.</li>
+<li>request: Handles file uploads and form data.</li>
+<li>redirect: Redirects to different URLs.</li>
+<li>url_for: Generates URLs for the app's functions.</li>
+<li>os: Interacts with the operating system, like creating directories or handling file paths.</li>
+<li>cv2: OpenCV library for image processing.</li>
+<li>numpy (np): For handling arrays and numerical operations.</li>
+<li>load_model: Loads the pre-trained Keras model used for character recognition.</li>
+
+<h1>Initializing the Flask App and Loading the Model</h1>
+
+app = Flask(__name__)<br>
+# Load your pre-trained model (make sure the path is correct)<br>
+model = load_model('models/character_recognition_model.h5')<br>
+<li>app: Creates an instance of the Flask app.</li>
+<li>model: Loads the pre-trained character recognition model from a .h5 file. This model is used for prediction later.</li>
+
+<h1> Setting Up the Upload Folder</h1>
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')<br>
+if not os.path.exists(UPLOAD_FOLDER):<br>
+    os.makedirs(UPLOAD_FOLDER)<br>
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER<br>
+
+<li>UPLOAD_FOLDER: Specifies the path to the directory where uploaded files (images) will be stored.</li>
+<li>os.makedirs: Creates the directory if it does not exist.</li>
+
+<h1>Image Preprocessing Function
+</h1>
+def preprocess_image(image_path, target_size=(48, 48)):<br>
+    image = cv2.imread(image_path)  # Read the image<br>
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale<br>
+    image = cv2.resize(image, target_size)  # Resize to the target size (48x48 pixels)<br>
+    image = image / 255.0  # Normalize the pixel values to [0, 1]<br>
+    image = np.expand_dims(image, axis=-1)  # Add a channel dimension for grayscale<br>
+    image = np.expand_dims(image, axis=0)  # Add a batch dimension<br>
+    return image<br>
+<li>cv2.imread: Reads the image from the given file path.</li>
+<li>cv2.cvtColor: Converts the image to grayscale, which simplifies the input for the model.</li>
+<li>cv2.resize: Resizes the image to the target size of 48x48 pixels, as required by the model.</li>
+<li>image / 255.0: Normalizes the image pixel values to a range between 0 and 1.</li>
+<li>np.expand_dims: Adds extra dimensions
+<li>First expand_dims adds a channel dimension (grayscale images have 1 channel).</li>
+<li>Second expand_dims adds a batch dimension, as the model expects a batch of images for prediction.</li>
+</li>
+<h1>Home Route
+</h1>
+@app.route('/')<br>
+def home():<br>
+    return render_template('index.html')<br>
+  <li>@app.route('/'): Defines the route for the home page (/), which is the default landing page.</li>
+  <li>render_template('index.html'): Renders the index.html file, which should contain the form for image upload.</li>
+
+
+
+
+
+
+
+
+
