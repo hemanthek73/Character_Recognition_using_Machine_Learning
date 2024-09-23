@@ -1,11 +1,11 @@
 ﻿# Character_Recognition_using_Machine_Learning
 <h1>Importing Libraries</h1>
 <h3>
-import os
-import numpy as np
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import os<br>
+import numpy as np<br>
+from tensorflow.keras.models import Sequential<br>
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout<br>
+from tensorflow.keras.preprocessing.image import ImageDataGenerator<br>
 from tensorflow.keras.optimizers import Adam</h3>
 <li>
   <ol>os: This module provides functions to interact with the operating system.</ol>
