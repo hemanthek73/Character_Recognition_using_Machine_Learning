@@ -1,6 +1,7 @@
 ﻿# Character_Recognition_using_Machine_Learning
 <h1>Importing Libraries</h1>
-'''import os
+'''python
+import os
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
