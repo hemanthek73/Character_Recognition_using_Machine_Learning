@@ -206,8 +206,49 @@ def home():<br>
   <li>@app.route('/'): Defines the route for the home page (/), which is the default landing page.</li>
   <li>render_template('index.html'): Renders the index.html file, which should contain the form for image upload.</li>
 
+<h1>Prediction Route</h1>
+@app.route('/predict', methods=['POST'])<br>
+def predict():<br>
+    if 'file' not in request.files:<br>
+        return redirect(request.url)<br>
+    
+    file = request.files['file']<br>
+    
+    if file.filename == '':<br>
+        return redirect(request.url)<br>
+    
+    if file:<br>
+        # Save the file to the 'uploads' folder<br>
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)<br>
+        file.save(file_path)<br>
+        
+        # Preprocess the image before prediction
+        image = preprocess_image(file_path)<br>
+        
+        # Make prediction using the loaded model<br>
+        prediction = model.predict(image)<br>
+        predicted_class = np.argmax(prediction) <br> # Get the predicted class index
+        
+        # Assuming you have a label encoder to convert index to actual label
+        # If not, replace with your own label mapping logic
+        labels = ['0', '1', '2', '3', '4','5','6', '7', '8','9','A', 'B', 'C', 'D', 'E','F','G', 'H', 'I', 'J', 'K','L','M', 'N', 'O', 'P', 'Q','R','S', 'T', 'U', 'V', 'W','X','Y','Z']  <br>
+        predicted_character = labels[predicted_class]<br>
+        
+        return render_template('result.html', character=predicted_character)<br>
+<li>@app.route('/predict', methods=['POST']): Defines the /predict route, which handles the form submission. The method is POST, meaning data (the file) is sent to the server.</li>
+<li>request.files['file']: Gets the uploaded file from the form.</li>
+<li>file.save(file_path): Saves the uploaded file to the uploads folder.</li>
+<li>preprocess_image(file_path): Preprocesses the image using the function defined earlier.</li>
+<li>model.predict(image): Uses the loaded model to predict the character in the image.</li>
+<li>np.argmax(prediction): Returns the index of the highest predicted probability, which corresponds to the predicted class.</li>
+<li>labels: A list that maps the predicted class index to the corresponding character (digits 0-9, letters A-Z).</li>
+<li>render_template('result.html', character=predicted_character): Renders a results page (result.html), passing the predicted character to be displayed.</li>
 
+<h1>Running the App</h1>
+if __name__ == '__main__':<br>
+    app.run(debug=True)<br>
 
+<li>app.run(debug=True): Runs the Flask application in debug mode, which provides detailed error messages and auto-restarts the server on code changes.</li>
 
 
 
